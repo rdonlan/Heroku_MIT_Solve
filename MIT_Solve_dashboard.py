@@ -62,7 +62,7 @@ bar_chart_to_display = px.bar(
   hover_data={selected_solver:True} #Here we will put all data we want on hover
 )
 bar_chart_to_display.update_layout(yaxis={'categoryorder':'total ascending'})
-# st.write(bar_chart_to_display)
+st.write(bar_chart_to_display)
 
 
 
