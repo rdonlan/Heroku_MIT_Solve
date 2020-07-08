@@ -37,7 +37,7 @@ def csv_to_df(csv_title):
 # Creates a variable that is the dataframe we will use for the graphing
 total_score_df = csv_to_df('total_Score.csv')
 #total_score_df.set_index("Unnamed: 0", inplace=True, drop=True)
-st.write(total_score_df)
+# st.write(total_score_df)
 
 # This creates the sidebbar on the left. It also allows the user to select any solver to see their results
 # which will be labeled as the selected_solver
