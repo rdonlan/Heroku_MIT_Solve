@@ -19,8 +19,8 @@ oauth = OAuth(app)
 
 auth0 = oauth.register(
     'auth0',
-    client_id='xF0YA3HXqbyz4IRrk5OK9PwvjACaKEuL',
-    client_secret='YOUR_CLIENT_SECRET',
+    client_id='CJSOii3B0DczzptekMSBShFWpUls2ye5',   #xF0YA3HXqbyz4IRrk5OK9PwvjACaKEuL
+    client_secret='QlHH2etY3zalmFnwBEp34aI3SDJuu7wyZQ5AyVHV6g03CsfkfG921ZlGvv0K-vU9',
     api_base_url='https://billowing-snowflake-1046.us.auth0.com',
     access_token_url='https://billowing-snowflake-1046.us.auth0.com/oauth/token',
     authorize_url='https://billowing-snowflake-1046.us.auth0.com/authorize',
