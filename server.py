@@ -51,7 +51,7 @@ def callback_handling():
 
 @app.route('/login')
 def login():
-    return auth0.authorize_redirect(redirect_uri='https://sheltered-sea-40585.herokuapp.com/')
+    return auth0.authorize_redirect(redirect_uri='https://sheltered-sea-40585.herokuapp.com/callback')
 
 def requires_auth(f):
   @wraps(f)
@@ -75,5 +75,5 @@ def logout():
     # Clear session stored data
     session.clear()
     # Redirect user to logout endpoint
-    params = {'returnTo': url_for('home', _external=True), 'client_id': 'xF0YA3HXqbyz4IRrk5OK9PwvjACaKEuL'}
+    params = {'returnTo': url_for('home', _external=True), 'client_id': 'CJSOii3B0DczzptekMSBShFWpUls2ye5'}
     return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))                    	     	      
