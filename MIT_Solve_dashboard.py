@@ -25,44 +25,116 @@ total_score_df = csv_to_df('total_Score.csv')
 #total_score_df.set_index("Unnamed: 0", inplace=True, drop=True)
 # st.write(total_score_df)
 
+# Make sidebar gith aligned
+html = """
+  <style>
+    .reportview-container {
+      flex-direction: row-reverse;
+    }
+
+    header > .toolbar {
+      flex-direction: row-reverse;
+      left: 1rem;
+      right: auto;
+    }
+
+    .sidebar .sidebar-collapse-control,
+    .sidebar.--collapsed .sidebar-collapse-control {
+      left: auto;
+      right: 0.5rem;
+    }
+
+    .sidebar .sidebar-content {
+      transition: margin-right .3s, box-shadow .3s;
+    }
+
+    .sidebar.--collapsed .sidebar-content {
+      margin-left: auto;
+      margin-right: -21rem;
+    }
+
+    @media (max-width: 991.98px) {
+      .sidebar .sidebar-content {
+        margin-left: auto;
+      }
+    }
+  </style>
+"""
+st.markdown(html, unsafe_allow_html=True)
+
+st.title("New Sidebar")
+
+
+
+
+
 # This creates the sidebbar on the left. It also allows the user to select any solver to see their results
 # which will be labeled as the selected_solver
+st.sidebar.markdown('### Select a Solver to see Their Best Potential Matches')
 selected_solver = st.sidebar.selectbox(
-    'Select a Solver',
+    'Solver',
      total_score_df.columns[1:])
+
 
 # This creates the sidebbar on the left. It also allows the user to select any mentor to see their results
 # which will be labeled as the selected_mentor
-selected_mentor = st.sidebar.selectbox(
-    'Select a Mentor',
-     list(total_score_df['Unnamed: 0']))
+# selected_mentor = st.sidebar.selectbox(
+#     'Select a Mentor',
+#      list(total_score_df['Unnamed: 0']))
+
+
+# This gets top 3 scores mentors that have those scores
+st.markdown("## Top Mentor Pair Suggestions for " + selected_solver)
+top_three_with_ties = total_score_df.nlargest(3, selected_solver, "all")
+labeled_top_three_with_ties = top_three_with_ties[['Unnamed: 0', selected_solver]].set_index("Unnamed: 0")
+#st.write(labeled_top_three_with_ties)
+
+# This look ranks the top mentors based on the top 3 scores
+previous_score_value = 1000
+tied_mentors = []
+max_counter = len(labeled_top_three_with_ties)
+counter = 1
+for mentor in labeled_top_three_with_ties.index:
+  total_output_value = labeled_top_three_with_ties[selected_solver][mentor]
+  if (previous_score_value == 1000):
+    previous_score_value = total_output_value
+    tied_mentors.append(mentor)
+    counter += 1
+  elif ((previous_score_value > total_output_value) and previous_score_value != 1000) or (counter == max_counter):#
+    msg = "Output value of " + str(previous_score_value) + ": "
+    for mentor_company in tied_mentors:
+      msg += str(mentor_company)
+      msg += "   ,   "
+    st.markdown("#### " +  msg)
+    tied_mentors = []
+    tied_mentors.append(mentor)
+    previous_score_value = total_output_value
+    counter += 1
+  elif (previous_score_value == total_output_value):
+    tied_mentors.append(mentor)
+    counter += 1
+  
 
 
 # This gets all mentors top 4 including ties
-st.title("Top Four Matches Including Ties")
+# st.title("Top Four Matches Including Ties")
 top_four_with_ties = total_score_df.nlargest(4, selected_solver, "all")
 labeled_top_four_with_ties = top_four_with_ties[['Unnamed: 0', selected_solver]].set_index("Unnamed: 0")
-#st.write(labeled_top_four_with_ties)
-
-# Below are place holders for the top 4 mentor matches
-# More thought must go into what information we want to represent about them besides output score
-# Need to figure out where to dynamically place output score to the left of mentor description and not within it
-
-ranking = 0
-ties = 0
-previous_value = 0
 
 # This for loop ranks the top 4 mentors with numbers on the left hand side
-for mentor in labeled_top_four_with_ties.index:
-  total_output_value = labeled_top_four_with_ties[selected_solver][mentor]
-  if (previous_value == total_output_value):
-    ties += 1
-  else:
-    ranking += ties
-    ties = 0
-    ranking+=1
-    previous_value = total_output_value
-  st.write(str(ranking) + ".   Mentor: " + mentor + " OUTPUT SCORE: " + str(total_output_value))
+# ranking = 0
+# ties = 0
+# previous_value = 0
+# for mentor in labeled_top_four_with_ties.index:
+#   total_output_value = labeled_top_four_with_ties[selected_solver][mentor]
+#   if (previous_value == total_output_value):
+#     ties += 1
+#   else:
+#     ranking += ties
+#     ties = 0
+#     ranking+=1
+#     previous_value = total_output_value
+#   st.write(str(ranking) + ".   Mentor: " + mentor + " OUTPUT SCORE: " + str(total_output_value))
   
   
   #print(labeled_top_four_with_ties[selected_solver][mentor])
@@ -80,6 +152,21 @@ bar_chart_to_display = px.bar(
   hover_data={selected_solver:True} #Here we will put all data we want on hover
 )
 bar_chart_to_display.update_layout(yaxis={'categoryorder':'total ascending'})
+
+# Format the chart
+bar_chart_to_display.update_layout(
+    autosize=False,
+    width=900,
+    height=1000,
+    margin=dict(
+        l=50,
+        r=50,
+        b=100,
+        t=100,
+        pad=4
+    )
+    #paper_bgcolor="LightSteelBlue",
+)
 st.write(bar_chart_to_display)
 
 # This gets all mentors with the highest value including ties
@@ -110,7 +197,13 @@ st.table(selected_solver_row_info.set_index("Org"))
 
 # TODO click on bargraph/label and get display more info of mentor
 # Display more information about the selected solver
-mentor_data_df = csv_to_df("excel_to_csv/partner_data.csv")
-selected_mentor_row_info = mentor_data_df[mentor_data_df['Org']==selected_mentor]
-st.title("More information on " + selected_mentor)
-st.table(selected_mentor_row_info.set_index("Org"))
+# mentor_data_df = csv_to_df("excel_to_csv/partner_data.csv")
+# selected_mentor_row_info = mentor_data_df[mentor_data_df['Org']==selected_mentor]
+# st.title("More information on " + selected_mentor)
+# st.table(selected_mentor_row_info.set_index("Org"))
+
+
+
+# .on_click(write a function)
+
+# def show_info(trace, points, selector)
