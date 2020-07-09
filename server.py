@@ -48,7 +48,8 @@ def callback_handling():
     }
     return redirect('/dashboard')
 
-    @app.route('/login')
+
+@app.route('/login')
 def login():
     return auth0.authorize_redirect(redirect_uri='https://sheltered-sea-40585.herokuapp.com/')
 
