@@ -4,9 +4,6 @@ import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
 
-import plotly.io as pio
-import matplotlib.pyplot
-
 
 # To run this application on your localhost you must first cd into the directory
 # containing MIT_Solve_dashboard.py and then in your terminal run 
