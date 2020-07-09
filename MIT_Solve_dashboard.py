@@ -4,6 +4,9 @@ import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
 
+import plotly.io as pio
+import matplotlib.pyplot
+
 
 # To run this application on your localhost you must first cd into the directory
 # containing MIT_Solve_dashboard.py and then in your terminal run 
@@ -62,8 +65,6 @@ html = """
 """
 st.markdown(html, unsafe_allow_html=True)
 
-st.title("New Sidebar")
-
 
 
 
@@ -72,15 +73,16 @@ st.title("New Sidebar")
 # which will be labeled as the selected_solver
 st.sidebar.markdown('### Select a Solver to see Their Best Potential Matches')
 selected_solver = st.sidebar.selectbox(
-    'Solver',
+    'Solver: ',
      total_score_df.columns[1:])
 
 
 # This creates the sidebbar on the left. It also allows the user to select any mentor to see their results
 # which will be labeled as the selected_mentor
-# selected_mentor = st.sidebar.selectbox(
-#     'Select a Mentor',
-#      list(total_score_df['Unnamed: 0']))
+st.sidebar.markdown('### Select a Mentor to see how their information matches up to ' + selected_solver)
+selected_mentor = st.sidebar.selectbox(
+    'Mentor: ',
+     list(total_score_df['Unnamed: 0']))
 
 
 # This gets top 3 scores mentors that have those scores
@@ -167,6 +169,7 @@ bar_chart_to_display.update_layout(
     )
     #paper_bgcolor="LightSteelBlue",
 )
+
 st.write(bar_chart_to_display)
 
 # This gets all mentors with the highest value including ties
@@ -191,19 +194,22 @@ top_four = ordered_df[:4]['Unnamed: 0']
 # Display more information about the selected solver
 solver_needs_df = csv_to_df("excel_to_csv/solver_team_data.csv")
 selected_solver_row_info = solver_needs_df[solver_needs_df['Org']==selected_solver].dropna(axis='columns')
-st.title("More information on " + selected_solver)
+st.title("Information on " + selected_solver)
 st.table(selected_solver_row_info.set_index("Org"))
 
 
 # TODO click on bargraph/label and get display more info of mentor
 # Display more information about the selected solver
-# mentor_data_df = csv_to_df("excel_to_csv/partner_data.csv")
-# selected_mentor_row_info = mentor_data_df[mentor_data_df['Org']==selected_mentor]
-# st.title("More information on " + selected_mentor)
-# st.table(selected_mentor_row_info.set_index("Org"))
+mentor_data_df = csv_to_df("excel_to_csv/partner_data.csv")
+selected_mentor_row_info = mentor_data_df[mentor_data_df['Org']==selected_mentor]
+st.title("More information on " + selected_mentor)
+st.table(selected_mentor_row_info.set_index("Org"))
 
 
+def updated_mentor_info(trace, points, selector):
+  selected_mentor_row_info = mentor_data_df[mentor_data_df['Org']==points]
+  st.title("More information on " + points)
+  st.table(selected_mentor_row_info.set_index("Org"))
 
-# .on_click(write a function)
+#bar_chart_to_display.on_click(updated_mentor_info)
 
-# def show_info(trace, points, selector)
