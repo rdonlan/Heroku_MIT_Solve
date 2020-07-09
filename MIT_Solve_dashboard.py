@@ -64,8 +64,21 @@ bar_chart_to_display = px.bar(
 bar_chart_to_display.update_layout(yaxis={'categoryorder':'total ascending'})
 st.write(bar_chart_to_display)
 
+# This gets all mentors with the highest value including ties
+st.write(total_score_df)
+top_values = total_score_df[total_score_df[selected_solver] == total_score_df[selected_solver].max()]
+#st.write(top_values['Unnamed: 0'])
 
+# This gets all mentors with the top 4 values not including ties
+ordered_df = total_score_df.sort_values(selected_solver, ascending=False)
+top_four = ordered_df[:4]['Unnamed: 0']
+#top_four = ordered_df[:4].index
+#st.write(top_four)
 
+# This gets all mentors top 4 including ties
+st.title("Top Four Matches Including Ties")
+top_four_with_ties = total_score_df.nlargest(4, selected_solver, "all")
+st.write(top_four_with_ties)
 
 
 # selected_row_for_chart = total_score_df[total_score_df['Org']==selected_solver]
@@ -77,7 +90,7 @@ st.write(bar_chart_to_display)
 solver_needs_df = csv_to_df("excel_to_csv/solver_team_data.csv")
 selected_solver_row_info = solver_needs_df[solver_needs_df['Org']==selected_solver]
 st.title("More information on " + selected_solver)
-st.table(selected_solver_row_info)
+st.write(selected_solver_row_info)
 
 
 # TODO click on bargraph/label and get display more info of mentor
@@ -85,4 +98,4 @@ st.table(selected_solver_row_info)
 mentor_data_df = csv_to_df("excel_to_csv/partner_data.csv")
 selected_mentor_row_info = mentor_data_df[mentor_data_df['Org']==selected_mentor]
 st.title("More information on " + selected_mentor)
-st.table(selected_mentor_row_info)
+st.write(selected_mentor_row_info)
