@@ -205,7 +205,7 @@ st.table(selected_mentor_row_info.set_index("Org"))
 
 def updated_mentor_info(trace, points, selector):
   selected_mentor_row_info = mentor_data_df[mentor_data_df['Org']==points]
-  st.title("More information on " + points)
+  st.title("Information on " + points)
   st.table(selected_mentor_row_info.set_index("Org"))
 
 #bar_chart_to_display.on_click(updated_mentor_info)
