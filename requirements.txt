@@ -7,8 +7,3 @@ flask
 python-dotenv
 python-jose
 flask-cors
-<<<<<<< HEAD
-six
-=======
-six
->>>>>>> 9b1d421177e1470a2179e898a7a30093bd9fb3a4
