@@ -199,7 +199,7 @@ st.table(selected_solver_row_info.set_index("Org"))
 # Display more information about the selected solver
 mentor_data_df = csv_to_df("excel_to_csv/partner_data.csv")
 selected_mentor_row_info = mentor_data_df[mentor_data_df['Org']==selected_mentor]
-st.title("More information on " + selected_mentor)
+st.title("Information on " + selected_mentor)
 st.table(selected_mentor_row_info.set_index("Org"))
 
 
